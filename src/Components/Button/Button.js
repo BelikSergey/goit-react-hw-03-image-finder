@@ -1,15 +1,16 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
-
-export default function Button(onclick, className) {
+export default function Button({ loadMore, className, buttonName }) {
+    // console.log(loadMore);
     return (
-        <button className={className} type="submit" onClick={onclick}></button>
-    )
+        <button className={className} type="submit" onClick={loadMore}>
+            {buttonName}
+        </button>
+    );
 }
 
-Button.propsTypes ={
-    onclick:PropTypes.func,
-    className:PropTypes.string,
-   
-}
-
+Button.propsTypes = {
+    loadMore: PropTypes.func,
+    className: PropTypes.string,
+    buttonName: PropTypes.string,
+};
