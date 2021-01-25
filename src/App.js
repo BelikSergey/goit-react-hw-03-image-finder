@@ -12,7 +12,7 @@ export default class App extends Component {
     };
 
     handleSearchFormSubmit = search => {
-        console.log(search);
+        // console.log(search);
         this.setState({ search });
     };
     // componentDidUpdate(prevProps,prevState){

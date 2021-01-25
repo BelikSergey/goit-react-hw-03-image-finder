@@ -11,7 +11,7 @@ import ImageGalleryItem from '../ImageGalleryItem';
 import Button from '../Button';
 
 // 'idle' "pending" "resolved" "rejected"
-console.log(Example);
+// console.log(Example);
 
 export default class ImageGallery extends Component {
     state = {
@@ -19,22 +19,18 @@ export default class ImageGallery extends Component {
         page: 1,
         gallery: null,
         status: 'idle',
-        modal: 'open',
+        modal: false,
         largeImg: '',
     };
 
-    // componentWillUnmount() {
-    //     this.reset()
-    // }
-
     async componentDidUpdate(prevProps, prevState) {
-        console.log('компонент обновился');
+        // console.log('компонент обновился');
         const prev = prevProps.search;
         const next = this.props.search;
         // console.log(prev);
         if (prev !== next) {
             this.setState({ status: 'pending' });
-            console.log('пропсы не равны идем к запросу');
+            // console.log('пропсы не равны идем к запросу');
             try {
                 const data = await pixabayApi(next, this.state.page);
                 this.setState({
@@ -44,7 +40,7 @@ export default class ImageGallery extends Component {
                 this.setState({ status: 'rejected' });
             }
 
-            console.log(this.state.gallery);
+            // console.log(this.state.gallery);
             if (this.state.gallery.length !== 0) {
                 this.setState({ status: 'resolved' });
             } else {
@@ -66,13 +62,30 @@ export default class ImageGallery extends Component {
             // console.log(this.state.gallery);
         }
     }
+    handleOnImageClick = e => {
+        console.log('click on img');
+        // console.dir(e.target.parentElement.id);
+        this.state.gallery.forEach(gal => {
+            // console.log(gal.id);
+            // console.log(gal.largeImageURL);
+            // console.log(e.target.parentElement.id);
+            // console.log(largeImageURL);
+            if (gal.id === Number(e.target.parentElement.id)) {
+                console.log(gal.largeImageURL);
+                console.log(gal);
+                this.setState({ largeImg: gal.largeImageURL });
+            }
+        });
+        this.setState({ modal: true });
+        console.log(this.state.largeImg);
+    };
     reset = () => {
         this.setState({
             search: '',
             page: 1,
             gallery: null,
             status: 'idle',
-            // modal: 'false',
+            modal: 'false',
             largeImg: '',
         });
     };
@@ -92,13 +105,17 @@ export default class ImageGallery extends Component {
         this.setState({ page: this.state.page + 1 });
         // console.log(this.state.page);
     };
+    componentWillUnmount() {
+        console.log('компонент галлерея размонтирован');
+        this.reset();
+    }
 
     render() {
-        const { gallery, status, modal } = this.state;
-        if (modal === 'open') {
-            console.log('условие выполниется');
-            return <Example />;
-        }
+        const { gallery, status, largeImg, modal } = this.state;
+        // if (modal === 'open') {
+        //     console.log('условие выполниется');
+        //     return <Example />;
+        // }
         if (status === 'idle') {
             return null;
         }
@@ -123,6 +140,7 @@ export default class ImageGallery extends Component {
                                     id={id}
                                     webformatURL={webformatURL}
                                     alt={tags}
+                                    onImageClick={this.handleOnImageClick}
                                 />
                             ))}
                     </ul>
@@ -131,6 +149,7 @@ export default class ImageGallery extends Component {
                         buttonName={'Load More'}
                         // className={button}
                     ></Button>
+                    {modal && <Example modal={modal} largeImg={largeImg} />}
                 </>
             );
         }
