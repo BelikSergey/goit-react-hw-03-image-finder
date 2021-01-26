@@ -4,7 +4,6 @@ import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { toast } from 'react-toastify';
 import 'react-popupbox/dist/react-popupbox.css';
-import { Example } from '../Modal/Modal';
 
 import pixabayApi from '../../services';
 import ImageGalleryItem from '../ImageGalleryItem';
@@ -19,8 +18,8 @@ export default class ImageGallery extends Component {
         page: 1,
         gallery: null,
         status: 'idle',
-        modal: false,
-        largeImg: '',
+        // showModal: false,
+        // largeImg: '',
     };
 
     async componentDidUpdate(prevProps, prevState) {
@@ -71,21 +70,22 @@ export default class ImageGallery extends Component {
             // console.log(e.target.parentElement.id);
             // console.log(largeImageURL);
             if (gal.id === Number(e.target.parentElement.id)) {
-                console.log(gal.largeImageURL);
+                // console.log(gal.largeImageURL);
                 console.log(gal);
-                this.setState({ largeImg: gal.largeImageURL });
+                this.props.largeImageURL(gal.largeImageURL);
             }
         });
         this.setState({ modal: true });
-        console.log(this.state.largeImg);
+        // console.log(this.state.largeImg);
     };
+
     reset = () => {
         this.setState({
             search: '',
             page: 1,
             gallery: null,
             status: 'idle',
-            modal: 'false',
+            showModal: 'false',
             largeImg: '',
         });
     };
@@ -111,7 +111,7 @@ export default class ImageGallery extends Component {
     }
 
     render() {
-        const { gallery, status, largeImg, modal } = this.state;
+        const { gallery, status } = this.state;
         // if (modal === 'open') {
         //     console.log('условие выполниется');
         //     return <Example />;
@@ -149,7 +149,7 @@ export default class ImageGallery extends Component {
                         buttonName={'Load More'}
                         // className={button}
                     ></Button>
-                    {modal && <Example modal={modal} largeImg={largeImg} />}
+                    {/* {modal && <Example modal={modal} largeImg={largeImg} />} */}
                 </>
             );
         }
@@ -160,12 +160,6 @@ export default class ImageGallery extends Component {
             });
             return null;
         }
-
-        // return(
-        //     <>
-        //     <Example />
-        //     </>
-        // )
     }
 }
 
