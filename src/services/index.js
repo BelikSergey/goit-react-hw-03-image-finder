@@ -1,1 +1,1 @@
-export {default} from './pixabayApi';
+export { default } from './pixabayApi';
