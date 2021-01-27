@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
+import styles from './Button.module.css';
 
-export default function Button({ loadMore, className, buttonName }) {
+export default function Button({ loadMore, buttonName }) {
     // console.log(loadMore);
     return (
-        <button className={className} type="submit" onClick={loadMore}>
+        <button className={styles.Button} type="button" onClick={loadMore}>
             {buttonName}
         </button>
     );
@@ -11,6 +12,5 @@ export default function Button({ loadMore, className, buttonName }) {
 
 Button.propsTypes = {
     loadMore: PropTypes.func,
-    className: PropTypes.string,
     buttonName: PropTypes.string,
 };

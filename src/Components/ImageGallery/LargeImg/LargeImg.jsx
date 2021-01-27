@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
 
-function LargeImg({ LargeImg, tag }) {
+function LargeImg({ LargeImg, alt }) {
     return (
         <>
-            <img src={LargeImg} alt={tag} />
+            <img src={LargeImg} alt={alt} />
         </>
     );
 }
 
 LargeImg.propTypes = {
     LargeImg: PropTypes.string.isRequired,
-    tag: PropTypes.string,
+    alt: PropTypes.string,
 };
 
 export default LargeImg;

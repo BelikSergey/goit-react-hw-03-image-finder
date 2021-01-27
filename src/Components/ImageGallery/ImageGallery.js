@@ -8,9 +8,7 @@ import 'react-popupbox/dist/react-popupbox.css';
 import pixabayApi from '../../services';
 import ImageGalleryItem from '../ImageGalleryItem';
 import Button from '../Button';
-
-// 'idle' "pending" "resolved" "rejected"
-// console.log(Example);
+import style from './ImageGallery.module.css';
 
 export default class ImageGallery extends Component {
     state = {
@@ -18,18 +16,13 @@ export default class ImageGallery extends Component {
         page: 1,
         gallery: null,
         status: 'idle',
-        // showModal: false,
-        // largeImg: '',
     };
 
     async componentDidUpdate(prevProps, prevState) {
-        // console.log('компонент обновился');
         const prev = prevProps.search;
         const next = this.props.search;
-        // console.log(prev);
         if (prev !== next) {
             this.setState({ status: 'pending' });
-            // console.log('пропсы не равны идем к запросу');
             try {
                 const data = await pixabayApi(next, this.state.page);
                 this.setState({
@@ -38,8 +31,6 @@ export default class ImageGallery extends Component {
             } catch (error) {
                 this.setState({ status: 'rejected' });
             }
-
-            // console.log(this.state.gallery);
             if (this.state.gallery.length !== 0) {
                 this.setState({ status: 'resolved' });
             } else {
@@ -52,27 +43,22 @@ export default class ImageGallery extends Component {
             this.setState(prevState => ({
                 gallery: [...prevState.gallery, ...data.data.hits],
             }));
-            // console.log(prevState.gallery.length);
-            // console.log();
             this.chekingGalleryLength(
                 prevState.gallery.length,
                 this.state.gallery.length,
             );
-            // console.log(this.state.gallery);
         }
     }
+    componentWillUnmount() {
+        // console.log('компонент галлерея размонтирован');
+        this.reset();
+    }
     handleOnImageClick = e => {
-        console.log('click on img');
-        // console.dir(e.target.parentElement.id);
         this.state.gallery.forEach(gal => {
-            // console.log(gal.id);
-            // console.log(gal.largeImageURL);
-            // console.log(e.target.parentElement.id);
             // console.log(largeImageURL);
             if (gal.id === Number(e.target.parentElement.id)) {
-                // console.log(gal.largeImageURL);
-                console.log(gal);
-                this.props.largeImageURL(gal.largeImageURL);
+                this.props.largeImageURL(gal.largeImageURL, gal.tags);
+                // this.props.tags(gal.tags);
             }
         });
         this.setState({ modal: true });
@@ -80,6 +66,7 @@ export default class ImageGallery extends Component {
     };
 
     reset = () => {
+        // console.log('очистился стейт галереи');
         this.setState({
             search: '',
             page: 1,
@@ -99,23 +86,12 @@ export default class ImageGallery extends Component {
 
     handleLoadMore = event => {
         event.preventDefault();
-
-        // console.log('был клик на добовление');
-        // console.log(this.state.page);
         this.setState({ page: this.state.page + 1 });
         // console.log(this.state.page);
     };
-    componentWillUnmount() {
-        console.log('компонент галлерея размонтирован');
-        this.reset();
-    }
 
     render() {
         const { gallery, status } = this.state;
-        // if (modal === 'open') {
-        //     console.log('условие выполниется');
-        //     return <Example />;
-        // }
         if (status === 'idle') {
             return null;
         }
@@ -132,7 +108,7 @@ export default class ImageGallery extends Component {
         if (status === 'resolved') {
             return (
                 <>
-                    <ul className="ImageGallery">
+                    <ul className={style.ImageGallery}>
                         {gallery &&
                             gallery.map(({ id, webformatURL, tags }) => (
                                 <ImageGalleryItem
@@ -147,9 +123,7 @@ export default class ImageGallery extends Component {
                     <Button
                         loadMore={this.handleLoadMore}
                         buttonName={'Load More'}
-                        // className={button}
                     ></Button>
-                    {/* {modal && <Example modal={modal} largeImg={largeImg} />} */}
                 </>
             );
         }
