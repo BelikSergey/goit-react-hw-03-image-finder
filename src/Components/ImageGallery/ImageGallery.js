@@ -43,6 +43,10 @@ export default class ImageGallery extends Component {
             this.setState(prevState => ({
                 gallery: [...prevState.gallery, ...data.data.hits],
             }));
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: 'smooth',
+            });
             this.chekingGalleryLength(
                 prevState.gallery.length,
                 this.state.gallery.length,
@@ -87,6 +91,7 @@ export default class ImageGallery extends Component {
     handleLoadMore = event => {
         event.preventDefault();
         this.setState({ page: this.state.page + 1 });
+
         // console.log(this.state.page);
     };
 
@@ -128,7 +133,7 @@ export default class ImageGallery extends Component {
             );
         }
         if (status === 'rejected') {
-            toast.error('Оппаньки Приплыли! Попробуйте позже!', {
+            toast.error('Опаньки Приплыли! Попробуйте позже!', {
                 autoClose: false,
                 position: 'top-center',
             });
